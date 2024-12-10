@@ -237,6 +237,10 @@ public:
         timeScanCur = cloudHeader.stamp.toSec();
         timeScanEnd = timeScanCur + laserCloudIn->points.back().time;
 
+        // remove Nan
+        vector<int> indices;
+        pcl::removeNaNFromPointCloud(*laserCloudIn, *laserCloudIn, indices);
+
         // check dense flag
         if (laserCloudIn->is_dense == false)
         {
@@ -257,10 +261,15 @@ public:
                     break;
                 }
             }
-            if (ringFlag == -1)
-            {
-                ROS_ERROR("Point cloud ring channel not available, please configure your point cloud data!");
-                ros::shutdown();
+            if (ringFlag == -1) {
+                if (sensor == SensorType::VELODYNE) {
+                    ringFlag = 2;
+                } else {
+                    ROS_ERROR("Point cloud ring channel not available, please configure your point cloud data!");
+                    ros::shutdown();
+                }
+                // ROS_ERROR("Point cloud ring channel not available, please configure your point cloud data!");
+                // ros::shutdown();
             }
         }
 
