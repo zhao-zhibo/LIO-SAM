@@ -27,7 +27,7 @@ find_package(OpenCV REQUIRED QUIET)
 find_package(GTSAM REQUIRED QUIET)
 find_package(Boost REQUIRED COMPONENTS timer)
 find_package(Boost REQUIRED COMPONENTS thread)
-find_package(Boost REQUIRED COMPONENTS date_time)
+find_package(Boost REQUIRED COMPONENTS date_time serialization chrono)
 
 add_message_files(
   DIRECTORY msg

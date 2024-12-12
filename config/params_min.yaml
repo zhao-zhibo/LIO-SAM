@@ -5,6 +5,10 @@ lio_sam:
   imuTopic: "/kitti/oxts/imu"                         # IMU data
   odomTopic: "odometry/imu"                   # IMU pre-preintegration odometry, same frequency as IMU
   gpsTopic: "odometry/gpsz"                   # GPS odometry topic from navsat, see module_navsat.launch file
+#  pointCloudTopic: "sensor_msgs/PointCloud2"               # Point cloud data
+#  imuTopic: "sensor_msgs/Imu"                         # IMU data
+#  odomTopic: "odometry/imu"                   # IMU pre-preintegration odometry, same frequency as IMU
+#  gpsTopic: "sensor_msgs/NavSatFix"                   # GPS odometry topic from navsat, see module_navsat.launch file
 
   # Frames
   lidarFrame: "base_link"
@@ -23,14 +27,20 @@ lio_sam:
   savePCDDirectory: "/Downloads/LOAM/"        # in your home folder, starts and ends with "/". Warning: the code deletes "LOAM" folder then recreates it. See "mapOptimization" for implementation
 
   # Sensor Settings
-  sensor: velodyne                            # lidar sensor type, 'velodyne' or 'ouster' or 'livox'
+  sensor: "velodyne"                            # lidar sensor type, 'velodyne' or 'ouster' or 'livox' or 'robosense'
   N_SCAN: 64                                  # number of lidar channel (i.e., Velodyne/Ouster: 16, 32, 64, 128, Livox Horizon: 6)
   Horizon_SCAN: 1800                          # lidar horizontal resolution (Velodyne:1800, Ouster:512,1024,2048, Livox Horizon: 4000)
   downsampleRate: 2                           # default: 1. Downsample your data if too many points. i.e., 16 = 64 / 4, 16 = 16 / 1
   lidarMinRange: 1.0                          # default: 1.0, minimum lidar range to be used
   lidarMaxRange: 1000.0                       # default: 1000.0, maximum lidar range to be used
+  
+  # add by sx
+  has_ring: false                             # lidar data format, if lidar driver has ring data publish, set 'ture'
+  ang_bottom: 15.1                            # if 'has_ring' is false, change it
+  ang_res_y: 2.0                              # if 'has_ring' is false, change it
 
   # IMU Settings
+  imuRate: 100
   imuAccNoise: 3.9939570888238808e-03
   imuGyrNoise: 1.5636343949698187e-03
   imuAccBiasN: 6.4356659353532566e-05
@@ -39,23 +49,25 @@ lio_sam:
   imuRPYWeight: 0.01
 
   # Extrinsics: T_lb (lidar -> imu)
-  # extrinsicTrans: [0.0, 0.0, 0.0]
-  # extrinsicRot: [-1, 0, 0,
-  #                 0, 1, 0,
-  #                 0, 0, -1]
-  # extrinsicRPY: [0, -1, 0,
-  #                1, 0, 0,
-  #                0, 0, 1]
+  # extrinsicTrans: [0.157627, -0.268624, 0.542515]
+  # extrinsicTrans: [-0.0222513, 0.0871116, 0.0743345]
 
+  # extrinsicRot: [-0.0483838,  0.0285692,    0.99842,
+  #                 0.0571398,   0.998033, -0.0257891,
+  #                  -0.997193,  0.0558017, -0.0499212]
+
+  # extrinsicRPY: [-0.0483838,  0.0285692,    0.99842,
+  #                 0.0571398,   0.998033, -0.0257891,
+  #                  -0.997193,  0.0558017, -0.0499212]
   extrinsicTrans: [-8.086759e-01, 3.195559e-01, -7.997231e-01]
-  extrinsicRot: [9.999976e-01, 7.553071e-04, -2.035826e-03, -7.854027e-04, 9.998898e-01, -1.482298e-02, 2.024406e-03, 1.482454e-02, 9.998881e-01]
-  extrinsicRPY: [9.999976e-01, 7.553071e-04, -2.035826e-03, -7.854027e-04, 9.998898e-01, -1.482298e-02, 2.024406e-03, 1.482454e-02, 9.998881e-01]
-  # extrinsicRot: [1, 0, 0,
-  #                 0, 1, 0,
-  #                 0, 0, 1]
-  # extrinsicRPY: [1, 0, 0,
-  #                 0, 1, 0,
-  #                 0, 0, 1]
+
+  extrinsicRot: [9.999976e-01, 7.553071e-04, -2.035826e-03,
+                 -7.854027e-04, 9.998898e-01, -1.482298e-02,
+                 2.024406e-03, 1.482454e-02, 9.998881e-01]
+
+  extrinsicRPY: [9.999976e-01, 7.553071e-04, -2.035826e-03,
+                 -7.854027e-04, 9.998898e-01, -1.482298e-02,
+                 2.024406e-03, 1.482454e-02, 9.998881e-01]
 
   # LOAM feature threshold
   edgeThreshold: 1.0
